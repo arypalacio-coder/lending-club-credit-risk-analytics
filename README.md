@@ -22,13 +22,13 @@ Prior to building the semantic layer in Power BI, data integrity, cash-flow metr
 ```sql
 SELECT
     b.grade,
-    COUNT(f.id) AS total_loans,
+    COUNT(f.loan_id) AS total_loans,
     ROUND(AVG(CASE WHEN s.loan_status = 'Charged Off' THEN 1.0 ELSE 0.0 END) * 100, 2) AS default_rate_pct,
     ROUND(SUM(f.total_pymnt) - SUM(f.funded_amnt), 2) AS net_profit,
     ROUND((SUM(f.total_pymnt) - SUM(f.funded_amnt)) / SUM(f.funded_amnt) * 100, 2) AS return_pct
 FROM fact_loans f
-JOIN dim_borrower b ON f.id = b.id
-JOIN dim_loan_status s ON f.id = s.id
+JOIN dim_borrower b ON f.borrower_id = b.borrower_id
+JOIN dim_loan_status s ON f.status_id = s.status_id
 WHERE s.loan_status IN ('Fully Paid', 'Charged Off')
 GROUP BY b.grade
 ORDER BY b.grade;
@@ -42,12 +42,12 @@ ORDER BY b.grade;
 ```sql
 SELECT
     b.grade,
-    COUNT(f.id) AS charged_off_loans,
+    COUNT(f.loan_id) AS charged_off_loans,
     ROUND(SUM(f.funded_amnt - f.total_pymnt), 2) AS total_net_loss,
     ROUND(SUM(f.funded_amnt - f.total_pymnt) / SUM(f.funded_amnt) * 100, 2) AS lgd_pct
 FROM fact_loans f
-JOIN dim_borrower b ON f.id = b.id
-JOIN dim_loan_status s ON f.id = s.id
+JOIN dim_borrower b ON f.borrower_id = b.borrower_id
+JOIN dim_loan_status s ON f.status_id = s.status_id
 WHERE s.loan_status = 'Charged Off'
 GROUP BY b.grade
 ORDER BY b.grade;
@@ -65,12 +65,12 @@ SELECT
         WHEN b.dti <= 20 THEN 'DTI <= 20%'
         ELSE 'DTI > 20%'
     END AS dti_exposure,
-    COUNT(f.id) AS total_loans,
+    COUNT(f.loan_id) AS total_loans,
     ROUND(AVG(CASE WHEN s.loan_status = 'Charged Off' THEN 1.0 ELSE 0.0 END) * 100, 2) AS default_rate_pct
 FROM fact_loans f
-JOIN dim_loan_contract c ON f.id = c.id
-JOIN dim_borrower b ON f.id = b.id
-JOIN dim_loan_status s ON f.id = s.id
+JOIN dim_loan_contract c ON f.contract_id = c.contract_id
+JOIN dim_borrower b ON f.borrower_id = b.borrower_id
+JOIN dim_loan_status s ON f.status_id = s.status_id
 WHERE s.loan_status IN ('Fully Paid', 'Charged Off')
 GROUP BY c.term, dti_exposure
 ORDER BY c.term, dti_exposure;
