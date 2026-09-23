@@ -106,7 +106,7 @@ To reflect actual realized profitability and eliminate bias from ongoing credit,
 Net Profit =
 CALCULATE(
     SUM(fact_loans[total_pymnt]) - SUM(fact_loans[funded_amnt]),
-    dim_loan_status[loan_status_clean] IN {"Fully Paid", "Charged Off"}
+    dim_loan_status[loan_status] IN {"Fully Paid", "Charged Off"}
 )
 ```
 
