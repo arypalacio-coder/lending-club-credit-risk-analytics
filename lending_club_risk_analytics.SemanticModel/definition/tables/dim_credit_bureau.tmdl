@@ -1,0 +1,124 @@
+table dim_credit_bureau
+	lineageTag: bf491de2-7cc8-470a-8550-a4260cb55272
+
+	column bureau_id
+		dataType: int64
+		lineageTag: b0528f57-bde3-4b2d-8321-fed50029cd24
+		summarizeBy: none
+		sourceColumn: bureau_id
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fico_range_low
+		dataType: double
+		lineageTag: 0195a177-170a-4afc-96a5-5b3ed7de1324
+		summarizeBy: none
+		sourceColumn: fico_range_low
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fico_range_high
+		dataType: double
+		lineageTag: f40fdd91-658f-4951-9fa1-ae47db4bc3bc
+		summarizeBy: none
+		sourceColumn: fico_range_high
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fico_average
+		dataType: double
+		lineageTag: b0f7e22d-8c4c-4fb5-8417-f6c69715d943
+		summarizeBy: none
+		sourceColumn: fico_average
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column earliest_cr_line
+		dataType: string
+		lineageTag: da647379-97c1-41f7-94a0-b619c05399e1
+		summarizeBy: none
+		sourceColumn: earliest_cr_line
+
+		annotation SummarizationSetBy = Automatic
+
+	column open_acc
+		dataType: double
+		lineageTag: 156764fa-6cac-49b9-b063-0b2fe15547ab
+		summarizeBy: none
+		sourceColumn: open_acc
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column revol_bal
+		dataType: double
+		lineageTag: ef060963-f620-4682-8c49-e4cb01c7ad85
+		summarizeBy: none
+		sourceColumn: revol_bal
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column revol_util
+		dataType: double
+		lineageTag: dac2e075-2e34-4e25-b9e8-b3da20076221
+		summarizeBy: none
+		sourceColumn: revol_util
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column delinq_2yrs
+		dataType: double
+		lineageTag: a9c25180-b8c5-4cab-b0a5-856c6344e5bf
+		summarizeBy: none
+		sourceColumn: delinq_2yrs
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column inq_last_6mths
+		dataType: double
+		lineageTag: 8fb9eb25-446b-434a-b83e-caf6517b667d
+		summarizeBy: none
+		sourceColumn: inq_last_6mths
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition dim_credit_bureau = m
+		mode: import
+		source = ```
+				let
+				    Origen = Odbc.DataSource("driver={SQLite3 ODBC Driver};database=C:\Users\Ary Palacios\Desktop\Proyecto riesgo SQL\lending_club.db;", [HierarchicalNavigation=true]),
+				    dim_credit_bureau_Table = Origen{[Name="dim_credit_bureau",Kind="Table"]}[Data],
+				    #"Filas filtradas" = Table.SelectRows(dim_credit_bureau_Table, each [bureau_id] <> null and [bureau_id] <> ""),
+				    #"Duplicados quitados" = Table.Distinct(#"Filas filtradas", {"bureau_id"}),
+				    Cols = Table.ColumnNames(#"Duplicados quitados"),
+				    Transformaciones = List.Transform(Cols, each 
+				        if Text.EndsWith(_, "_id") or _ = "id" then {_, Int64.Type}
+				        else if _ = "earliest_cr_line" then {_, type text}
+				        else {_, type number}
+				    ),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Duplicados quitados", Transformaciones, "en-US")
+				in
+				    #"Tipo cambiado"
+				```
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegación
+

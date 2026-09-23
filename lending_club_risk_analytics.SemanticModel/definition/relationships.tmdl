@@ -1,0 +1,20 @@
+relationship eee79874-f705-b970-ad37-d5450e902fa7
+	fromColumn: fact_loans.borrower_id
+	toColumn: dim_borrower.borrower_id
+
+relationship 59552f07-f356-52e6-a828-b1b0a74ebbe8
+	fromColumn: fact_loans.bureau_id
+	toColumn: dim_credit_bureau.bureau_id
+
+relationship 4759db04-4785-1a3e-35f0-b0caab9692d7
+	fromColumn: fact_loans.issue_date_id
+	toColumn: dim_date.issue_date_id
+
+relationship da661495-c1a7-6182-4446-8b3adc58a3de
+	fromColumn: fact_loans.contract_id
+	toColumn: dim_loan_contract.contract_id
+
+relationship d38e3445-1ce6-0813-b10e-32ab169e0562
+	fromColumn: fact_loans.status_id
+	toColumn: dim_loan_status.status_id
+

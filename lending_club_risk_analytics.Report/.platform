@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "lending_club_risk_analytics"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "9def6387-03c9-4695-9d10-68e517c7ff2e"
+  }
+}

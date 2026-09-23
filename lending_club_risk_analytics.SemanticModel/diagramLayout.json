@@ -1,0 +1,113 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 137.23113188157834,
+        "y": 126.46790769659725
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 346.04215153291125,
+            "y": 579.37267098233031
+          },
+          "nodeIndex": "dim_borrower",
+          "nodeLineageTag": "359e4b71-e851-4ba2-a83d-b2a298e36056",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 272.93929196013522,
+            "y": 200.07082289507534
+          },
+          "nodeIndex": "dim_credit_bureau",
+          "nodeLineageTag": "bf491de2-7cc8-470a-8550-a4260cb55272",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 568,
+            "y": 93
+          },
+          "nodeIndex": "dim_date",
+          "nodeLineageTag": "e4287b8b-a60e-4942-baab-c71cbc6f556d",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 921.52445053629276,
+            "y": 245.33051944941906
+          },
+          "nodeIndex": "dim_loan_contract",
+          "nodeLineageTag": "872e3938-e51b-461d-b1bd-9d5ff8397e4b",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 916.36594035125745,
+            "y": 642.875199696133
+          },
+          "nodeIndex": "dim_loan_status",
+          "nodeLineageTag": "769cca24-e5a6-429d-8c87-1302a3d0c1de",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 658.39124639788486,
+            "y": 381.78245497856756
+          },
+          "nodeIndex": "fact_loans",
+          "nodeLineageTag": "4dadf4d3-353d-400d-859b-88c5bf2cbe8a",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 932.58515857615748,
+            "y": 257.9375998480665
+          },
+          "nodeIndex": "_Medidas",
+          "nodeLineageTag": "b0f3a612-4e89-4d6f-9988-123456789abc",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas las tablas",
+      "zoomValue": 89.192590520569524,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas las tablas",
+  "defaultDiagram": "Todas las tablas"
+}

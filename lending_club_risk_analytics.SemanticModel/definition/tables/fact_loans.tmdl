@@ -1,0 +1,177 @@
+table fact_loans
+	lineageTag: 4dadf4d3-353d-400d-859b-88c5bf2cbe8a
+
+	column loan_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 13bd03ef-ab35-4cb8-83ac-485cef6594fa
+		summarizeBy: sum
+		sourceColumn: loan_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column borrower_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 290e6797-3302-4503-8a21-ceb3f83f934e
+		summarizeBy: none
+		sourceColumn: borrower_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column bureau_id
+		dataType: int64
+		formatString: 0
+		lineageTag: b2dfe588-0d9a-4134-bab2-0a7fa03159bc
+		summarizeBy: none
+		sourceColumn: bureau_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column contract_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f69100f-5604-4bc7-bd20-a8abeb3e996f
+		summarizeBy: none
+		sourceColumn: contract_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column status_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 3e721787-39e0-45b2-b740-4ce27160cb91
+		summarizeBy: none
+		sourceColumn: status_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column issue_date_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 44aa5c3d-8715-4901-8f8d-5dff69d561ff
+		summarizeBy: none
+		sourceColumn: issue_date_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column loan_amnt
+		dataType: double
+		lineageTag: 40f06888-4d47-43d1-b496-f26ac671da71
+		summarizeBy: sum
+		sourceColumn: loan_amnt
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column funded_amnt
+		dataType: double
+		lineageTag: f4033378-1744-47ad-b69b-5ba54bd58e5b
+		summarizeBy: sum
+		sourceColumn: funded_amnt
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column int_rate
+		dataType: double
+		lineageTag: 9361890f-54e4-4bbd-89d5-2096bb61b195
+		summarizeBy: sum
+		sourceColumn: int_rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column installment
+		dataType: double
+		lineageTag: 4e33d2bf-c1a3-410f-82b6-f685fb0e5e3b
+		summarizeBy: sum
+		sourceColumn: installment
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_pymnt
+		dataType: double
+		lineageTag: 2dc2a121-4d12-432e-af68-f1f1c6639023
+		summarizeBy: sum
+		sourceColumn: total_pymnt
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_rec_prncp
+		dataType: double
+		lineageTag: 5d48881c-48eb-48b9-9698-9c2413863309
+		summarizeBy: sum
+		sourceColumn: total_rec_prncp
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_rec_int
+		dataType: double
+		lineageTag: b386aede-6a2d-4873-a567-465af62923ef
+		summarizeBy: sum
+		sourceColumn: total_rec_int
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_rec_late_fee
+		dataType: double
+		lineageTag: eb92e794-9c2b-4c36-9fc3-9b0daec2172c
+		summarizeBy: sum
+		sourceColumn: total_rec_late_fee
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column recoveries
+		dataType: double
+		lineageTag: 67689030-6f64-44d6-b33c-5895680e6e55
+		summarizeBy: sum
+		sourceColumn: recoveries
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column collection_recovery_fee
+		dataType: double
+		lineageTag: cf8f511d-950c-459c-9c9c-55a1dffa0feb
+		summarizeBy: sum
+		sourceColumn: collection_recovery_fee
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_loans = m
+		mode: import
+		source = ```
+				let
+				    Origen = Odbc.DataSource("driver={SQLite3 ODBC Driver};database=C:\Users\Ary Palacios\Desktop\Proyecto riesgo SQL\lending_club.db;", [HierarchicalNavigation=true]),
+				    fact_loans_Table = Origen{[Name="fact_loans",Kind="Table"]}[Data],
+				    Cols = Table.ColumnNames(fact_loans_Table),
+				    Transformaciones = List.Transform(Cols, each 
+				        if Text.EndsWith(_, "_id") or _ = "id" then {_, Int64.Type}
+				        else {_, type number}
+				    ),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(fact_loans_Table, Transformaciones, "en-US")
+				in
+				    #"Tipo cambiado"
+				```
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

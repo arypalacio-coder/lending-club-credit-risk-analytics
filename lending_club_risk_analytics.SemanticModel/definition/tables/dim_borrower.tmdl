@@ -1,0 +1,86 @@
+table dim_borrower
+	lineageTag: 359e4b71-e851-4ba2-a83d-b2a298e36056
+
+	column borrower_id
+		dataType: int64
+		lineageTag: b7f24bc2-9b92-4771-85c8-672b7a5bdcb9
+		summarizeBy: none
+		sourceColumn: borrower_id
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column annual_inc
+		dataType: double
+		lineageTag: 6b59c976-4643-4823-aa5d-e8482552b2b9
+		summarizeBy: none
+		sourceColumn: annual_inc
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column emp_length
+		dataType: string
+		lineageTag: fda079d7-d311-47fc-8a1b-6ff0491fdde1
+		summarizeBy: none
+		sourceColumn: emp_length
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_ownership
+		dataType: string
+		lineageTag: b71a333e-7455-478e-ae70-e2e1b31caeb6
+		summarizeBy: none
+		sourceColumn: home_ownership
+
+		annotation SummarizationSetBy = Automatic
+
+	column verification_status
+		dataType: string
+		lineageTag: 83867334-d51f-4831-acc9-cfe1dd729ad9
+		summarizeBy: none
+		sourceColumn: verification_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column dti
+		dataType: double
+		lineageTag: 62b5d0aa-6c11-4b0a-9a3d-1b60f5cd8e07
+		summarizeBy: none
+		sourceColumn: dti
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'DTI Group' = IF(dim_borrower[dti] <= 20, "DTI <= 20%", "DTI > 20%")
+		lineageTag: 772acd44-f8d2-44c0-b0a6-13b1ea51e844
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_borrower = m
+		mode: import
+		source = ```
+				let
+				    Origen = Odbc.DataSource("driver={SQLite3 ODBC Driver};database=C:\Users\Ary Palacios\Desktop\Proyecto riesgo SQL\lending_club.db;", [HierarchicalNavigation=true]),
+				    dim_borrower_Table = Origen{[Name="dim_borrower",Kind="Table"]}[Data],
+				    #"Filas filtradas" = Table.SelectRows(dim_borrower_Table, each [borrower_id] <> null and [borrower_id] <> ""),
+				    #"Duplicados quitados" = Table.Distinct(#"Filas filtradas", {"borrower_id"}),
+				    Cols = Table.ColumnNames(#"Duplicados quitados"),
+				    Transformaciones = List.Transform(Cols, each 
+				        if Text.EndsWith(_, "_id") or _ = "id" then {_, Int64.Type}
+				        else if _ = "annual_inc" or _ = "dti" then {_, type number}
+				        else {_, type text}
+				    ),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Duplicados quitados", Transformaciones, "en-US")
+				in
+				    #"Tipo cambiado"
+				```
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegación
+

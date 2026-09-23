@@ -1,0 +1,14 @@
+﻿*.db
+*.sqlite
+*.sqlite3
+*.csv
+*.zip
+*.gz
+*.tar
+*.xlsx
+*.sqbpro
+*.abf
+cache.abf
+**/cache.abf
+Data Set/
+*.pbix.backup

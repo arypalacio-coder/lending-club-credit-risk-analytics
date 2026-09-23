@@ -1,0 +1,98 @@
+table _Medidas
+	lineageTag: b0f3a612-4e89-4d6f-9988-123456789abc
+
+	measure 'Total Funded Amount' = SUM(fact_loans[funded_amnt])
+		formatString: #,##0
+		lineageTag: a1111111-0001-0000-0000-000000000001
+
+	measure 'Total Loans' = COUNTROWS(fact_loans)
+		formatString: #,##0
+		lineageTag: a1111111-0002-0000-0000-000000000002
+
+	measure 'Default Loans' =
+			CALCULATE(
+			    COUNTROWS(fact_loans),
+			    dim_loan_status[loan_status] = "Charged Off"
+			)
+		formatString: #,##0
+		lineageTag: a1111111-0003-0000-0000-000000000003
+
+	measure 'Default Rate' = DIVIDE([Default Loans], [Total Loans], 0)
+		formatString: 0.00%
+		lineageTag: a1111111-0004-0000-0000-000000000004
+
+	measure 'Total Cash Received' = SUM(fact_loans[total_pymnt])
+		formatString: #,##0.00
+		lineageTag: a1111111-0005-0000-0000-000000000005
+
+	measure 'Weighted Avg Interest Rate' = DIVIDE(SUMX(fact_loans, fact_loans[int_rate] * fact_loans[funded_amnt]), [Total Funded Amount], 0)
+		formatString: 0.00%
+		lineageTag: a1111111-0006-0000-0000-000000000006
+
+	measure 'Total Net Loss' =
+			CALCULATE(
+			    SUM(fact_loans[funded_amnt]) - SUM(fact_loans[total_pymnt]),
+			    dim_loan_status[loan_status] = "Charged Off"
+			)
+		formatString: #,##0
+		lineageTag: a1111111-0007-0000-0000-000000000007
+
+	measure 'Net Profit (M)' =
+			CALCULATE(
+			    DIVIDE(
+			        SUM(fact_loans[total_pymnt]) - SUM(fact_loans[funded_amnt]),
+			        1000000,
+			        0
+			    ),
+			    dim_loan_status[loan_status] IN { "Fully Paid", "Charged Off" }
+			)
+		formatString: #,##0.00
+		lineageTag: 5871a434-35e4-4f49-937d-0f6edb220390
+
+	measure 'Return Pct' =
+			CALCULATE(
+			    DIVIDE(
+			        SUM(fact_loans[total_pymnt]) - SUM(fact_loans[funded_amnt]),
+			        SUM(fact_loans[funded_amnt]),
+			        0
+			    ),
+			    dim_loan_status[loan_status] IN { "Fully Paid", "Charged Off" }
+			)
+		formatString: 0.00%
+		lineageTag: 9a7d93cf-559b-4a4f-8948-aae01020c57c
+
+	measure 'LGD Pct' =
+			VAR LossAmount = [Total Net Loss]
+			VAR FundedChargedOff =
+			    CALCULATE(
+			        SUM(fact_loans[funded_amnt]),
+			        dim_loan_status[loan_status] = "Charged Off"
+			    )
+			RETURN
+			    DIVIDE(LossAmount, FundedChargedOff, 0)
+		formatString: 0.00%
+		lineageTag: 57f1ccde-6cd5-4fb2-a91c-413fb1d8c4a6
+
+	measure 'Check Pymnt' = SUM(fact_loans[total_pymnt])
+		formatString: #,##0.00
+		lineageTag: 1841de4f-9686-46cb-985f-32218e3f9b50
+
+	column Placeholder
+		dataType: string
+		isHidden
+		lineageTag: a1111111-0008-0000-0000-000000000008
+		summarizeBy: none
+		sourceColumn: Placeholder
+
+	partition _Medidas = m
+		mode: import
+		source =
+				let
+				    Source = #table(type table [Placeholder = text], {{"Medidas"}})
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegacion
+

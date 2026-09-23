@@ -1,0 +1,24 @@
+model Model
+	culture: es-ES
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-CL
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["_Medidas","dim_borrower","dim_date","dim_credit_bureau","dim_loan_contract","dim_loan_status","fact_loans"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table dim_borrower
+ref table dim_date
+ref table dim_credit_bureau
+ref table dim_loan_contract
+ref table dim_loan_status
+ref table fact_loans
+ref table _Medidas
+
+ref cultureInfo es-ES
+

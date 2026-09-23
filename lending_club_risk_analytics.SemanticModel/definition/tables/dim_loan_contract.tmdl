@@ -1,0 +1,68 @@
+table dim_loan_contract
+	lineageTag: 872e3938-e51b-461d-b1bd-9d5ff8397e4b
+
+	column contract_id
+		dataType: int64
+		formatString: 0
+		lineageTag: d6c328c5-8972-4053-b11e-f0668b5f99a7
+		summarizeBy: none
+		sourceColumn: contract_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column grade
+		dataType: string
+		lineageTag: 8492484f-c9df-4b82-921e-63e590632ae7
+		summarizeBy: none
+		sourceColumn: grade
+
+		annotation SummarizationSetBy = Automatic
+
+	column sub_grade
+		dataType: string
+		lineageTag: c2c075f0-ff99-4ea3-8065-75c50132e264
+		summarizeBy: none
+		sourceColumn: sub_grade
+
+		annotation SummarizationSetBy = Automatic
+
+	column term_months
+		dataType: int64
+		lineageTag: 3ac7c191-a7be-4d16-b95b-1010cfe07805
+		summarizeBy: none
+		sourceColumn: term_months
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column purpose
+		dataType: string
+		lineageTag: e61bbf21-4ff4-469b-984b-f98a130d9cf2
+		summarizeBy: none
+		sourceColumn: purpose
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_loan_contract = m
+		mode: import
+		source = ```
+				let
+				    Origen = Odbc.DataSource("driver={SQLite3 ODBC Driver};database=C:\Users\Ary Palacios\Desktop\Proyecto riesgo SQL\lending_club.db;", [HierarchicalNavigation=true]),
+				    dim_loan_contract_Table = Origen{[Name="dim_loan_contract",Kind="Table"]}[Data],
+				    #"Filas filtradas" = Table.SelectRows(dim_loan_contract_Table, each [contract_id] <> null and [contract_id] <> ""),
+				    #"Duplicados quitados" = Table.Distinct(#"Filas filtradas", {"contract_id"}),
+				    Cols = Table.ColumnNames(#"Duplicados quitados"),
+				    Transformaciones = List.Transform(Cols, each 
+				        if Text.EndsWith(_, "_id") or _ = "id" or _ = "term_months" then {_, Int64.Type}
+				        else {_, type text}
+				    ),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Duplicados quitados", Transformaciones, "en-US")
+				in
+				    #"Tipo cambiado"
+				```
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegación
+

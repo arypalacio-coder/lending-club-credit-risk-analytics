@@ -1,0 +1,58 @@
+table dim_loan_status
+	lineageTag: 769cca24-e5a6-429d-8c87-1302a3d0c1de
+
+	column status_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 0324cc1e-1b5a-4d4a-bf1d-e212fdad8b4a
+		summarizeBy: none
+		sourceColumn: status_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column loan_status
+		dataType: string
+		lineageTag: 008dd27d-2df5-4f58-9455-61da080601c3
+		summarizeBy: none
+		sourceColumn: loan_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_closed
+		dataType: string
+		lineageTag: a1ce3c4b-e424-422a-88e1-488135b7dfdf
+		summarizeBy: none
+		sourceColumn: is_closed
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_default
+		dataType: string
+		lineageTag: c256e9b8-6176-4e5b-b1d2-0a588c625ad5
+		summarizeBy: none
+		sourceColumn: is_default
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_loan_status = m
+		mode: import
+		source = ```
+				let
+				    Origen = Odbc.DataSource("driver={SQLite3 ODBC Driver};database=C:\Users\Ary Palacios\Desktop\Proyecto riesgo SQL\lending_club.db;", [HierarchicalNavigation=true]),
+				    dim_loan_status_Table = Origen{[Name="dim_loan_status",Kind="Table"]}[Data],
+				    #"Filas filtradas" = Table.SelectRows(dim_loan_status_Table, each [status_id] <> null and [status_id] <> ""),
+				    #"Duplicados quitados" = Table.Distinct(#"Filas filtradas", {"status_id"}),
+				    Cols = Table.ColumnNames(#"Duplicados quitados"),
+				    Transformaciones = List.Transform(Cols, each 
+				        if Text.EndsWith(_, "_id") or _ = "id" then {_, Int64.Type}
+				        else {_, type text}
+				    ),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Duplicados quitados", Transformaciones, "en-US")
+				in
+				    #"Tipo cambiado"
+				```
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegación
+

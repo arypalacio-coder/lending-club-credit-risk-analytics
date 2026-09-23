@@ -1,0 +1,201 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "d75b136095ad6ad00192",
+  "position": {
+    "x": 0,
+    "y": 278.65168539325839,
+    "z": 0,
+    "height": 737.0786516853932,
+    "width": 632.8089887640449,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "lineClusteredColumnComboChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_loan_contract"
+                    }
+                  },
+                  "Property": "grade"
+                }
+              },
+              "queryRef": "dim_loan_contract.grade",
+              "nativeQueryRef": "grade",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Net Profit (M)"
+                }
+              },
+              "queryRef": "_Medidas.Net Profit (M)",
+              "nativeQueryRef": "Net Profit (M)"
+            }
+          ]
+        },
+        "Y2": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Return Pct"
+                }
+              },
+              "queryRef": "_Medidas.Return Pct",
+              "nativeQueryRef": "Return Pct"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Default Rate"
+                }
+              },
+              "queryRef": "_Medidas.Default Rate",
+              "nativeQueryRef": "Default Rate"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "dim_loan_contract"
+                  }
+                },
+                "Property": "grade"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Actual Profitability vs. Default Rate by Risk Grade'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "20D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Net Profit ($M), Realized Return (%), and Default Rate across Grades (A–G)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "013abd608c4801688d0c",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_loan_contract"
+              }
+            },
+            "Property": "grade"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "06bbfd56d7b0ae6dec84",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Net Profit (M)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "87ec59dba07d204b3ca1",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Return Pct"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "52f3830156ea681e3859",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Default Rate"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}
