@@ -8,7 +8,7 @@ The objective of this project is to analyze loan performance, credit loss distri
 
 ## Executive Report
 
-![Credit Risk & LGD Executive Report](assets/dashboard.png)
+![Credit Risk & LGD Executive Report](./img/dashboard.png)
 
 ---
 
